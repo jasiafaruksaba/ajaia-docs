@@ -41,3 +41,35 @@ export async function readJson(
     return null;
   }
 }
+export const SHARE_ROLES = ["VIEWER", "EDITOR"] as const;
+export type ShareRoleValue = (typeof SHARE_ROLES)[number];
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export function parseEmail(value: unknown): ParseResult {
+  if (typeof value !== "string") {
+    return { ok: false, error: "Email must be a string." };
+  }
+
+  const email = value.trim().toLowerCase();
+
+  if (!email) {
+    return { ok: false, error: "Email is required." };
+  }
+
+  if (email.length > 254 || !EMAIL_PATTERN.test(email)) {
+    return { ok: false, error: "Enter a valid email address." };
+  }
+
+  return { ok: true, value: email };
+}
+
+export function parseShareRole(
+  value: unknown,
+): { ok: true; value: ShareRoleValue } | { ok: false; error: string } {
+  if (value === "VIEWER" || value === "EDITOR") {
+    return { ok: true, value };
+  }
+
+  return { ok: false, error: "Role must be VIEWER or EDITOR." };
+}

@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
-import { canEditDocument, canViewDocument } from "@/lib/access";
+import {
+  canEditDocument,
+  canShareDocument,
+  canViewDocument,
+} from "@/lib/access";
 import { getDocumentForUser } from "@/lib/documents";
 import Editor from "@/components/Editor";
+import ShareDialog from "@/components/ShareDialog";
 
 type PageProps = { params: Promise<{ id: string }> };
 
@@ -42,11 +47,14 @@ export default async function DocumentPage({ params }: PageProps) {
             ← Back to documents
           </Link>
 
-          <div className="flex items-center gap-3 text-sm text-slate-600">
+         <div className="flex items-center gap-3 text-sm text-slate-600">
             <span>Owner: {document.owner.name}</span>
             <span className="rounded-full bg-slate-200 px-3 py-1 text-xs font-medium text-slate-700">
               {accessLabels[access]}
             </span>
+            {canShareDocument(access) ? (
+              <ShareDialog documentId={document.id} />
+            ) : null}
           </div>
         </div>
 
