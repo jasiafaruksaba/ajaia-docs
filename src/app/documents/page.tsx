@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { listDocumentsForUser } from "@/lib/documents";
 import CreateDocumentButton from "@/components/CreateDocumentButton";
+import ImportDocumentButton from "@/components/ImportDocumentButton";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   dateStyle: "medium",
@@ -44,7 +45,10 @@ export default async function DocumentsPage() {
             <h2 className="text-lg font-semibold text-slate-900">
               My documents
             </h2>
-            <CreateDocumentButton />
+             <div className="flex items-start gap-3">
+              <ImportDocumentButton />
+              <CreateDocumentButton />
+            </div>
           </div>
 
           {owned.length === 0 ? (
